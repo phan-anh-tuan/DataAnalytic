@@ -1,0 +1,26 @@
+﻿@using DataAnalytic.Domain.Entities
+@model IEnumerable<DataSource>
+
+@{
+    ViewBag.Title = "Data Source List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div id="loading" style="display: none">
+    <p>Processing...</p>
+</div>
+<table>
+    <thead>
+        <tr>
+            <th>Url</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (DataSource ds in Model)
+        {
+            Html.RenderPartial("DataSourceDetail", ds);
+        }
+    </tbody>
+</table>
+

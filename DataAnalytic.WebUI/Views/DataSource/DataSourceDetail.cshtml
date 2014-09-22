@@ -1,0 +1,31 @@
+﻿@using DataAnalytic.Domain.Entities
+@model DataSource
+
+@{
+    AjaxOptions ajaxOpts = new AjaxOptions
+    {
+        UpdateTargetId = "table_ds_status_" + Model.ID,
+        LoadingElementId = "loading",
+        LoadingElementDuration = 1000
+    };
+}
+<tr>
+    <td>@Model.URL</td>
+    <td id="table_ds_status_@Model.ID">@{
+        if (Model.UpdatedDate.Date == System.DateTime.Now.Date)
+        { 
+        @:completed
+         } 
+    }
+    </td>
+    <td>
+        @if (Model.IsActive)
+        {
+            using (Ajax.BeginForm("GetUpdateStatus", ajaxOpts))
+            {
+            @Html.HiddenFor(ds => ds.URL);
+            <button type="submit">Load Data</button>
+            }
+        }
+    </td>
+</tr>

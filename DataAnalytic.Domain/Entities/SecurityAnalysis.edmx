@@ -1,0 +1,417 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DataAnalytic.Domain.Entities.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="DataAnalyticDomainEntitiesStoreContainer">
+          <EntitySet Name="Company" EntityType="DataAnalytic.Domain.Entities.Store.Company" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Country" EntityType="DataAnalytic.Domain.Entities.Store.Country" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Culture" EntityType="DataAnalytic.Domain.Entities.Store.Culture" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="IndexDailyTransaction" EntityType="DataAnalytic.Domain.Entities.Store.IndexDailyTransaction" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Indicies" EntityType="DataAnalytic.Domain.Entities.Store.Indicies" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="IndustryGroup" EntityType="DataAnalytic.Domain.Entities.Store.IndustryGroup" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Language" EntityType="DataAnalytic.Domain.Entities.Store.Language" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Security" EntityType="DataAnalytic.Domain.Entities.Store.Security" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SecurityDailyTransaction" EntityType="DataAnalytic.Domain.Entities.Store.SecurityDailyTransaction" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SecurityType" EntityType="DataAnalytic.Domain.Entities.Store.SecurityType" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="CompanyID" />
+          </Key>
+          <Property Name="CompanyID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="nvarchar" Nullable="false" MaxLength="6" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="500" />
+          <Property Name="IndustryGroupID" Type="int" />
+          <Property Name="CultureID" Type="int" />
+        </EntityType>
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="CountryID" />
+          </Key>
+          <Property Name="CountryID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="CultureID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="ISO3166A2" Type="nvarchar" MaxLength="2" />
+          <Property Name="ISO3166A3" Type="nvarchar" MaxLength="3" />
+          <Property Name="ISO3166NUM" Type="smallint" />
+        </EntityType>
+        <EntityType Name="Culture">
+          <Key>
+            <PropertyRef Name="CultureID" />
+          </Key>
+          <Property Name="CultureID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="LanguageID" Type="int" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="250" />
+          <Property Name="RFC1766LanguageTag" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="IndexDailyTransaction">
+          <Key>
+            <PropertyRef Name="IndexDailyTransactionID" />
+          </Key>
+          <Property Name="IndexDailyTransactionID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="TransactionDate" Type="datetime" Nullable="false" />
+          <Property Name="IndexCode" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="Code" Type="nvarchar" Nullable="false" MaxLength="6" />
+          <Property Name="ClosePrice" Type="numeric" Precision="27" Scale="10" />
+          <Property Name="LastPrice" Type="numeric" Precision="27" Scale="10" />
+          <Property Name="ChangedPrice" Type="numeric" Precision="27" Scale="10" />
+          <Property Name="ChangedPercentage" Type="numeric" Precision="27" Scale="10" />
+          <Property Name="TotalPrice" Type="numeric" Precision="27" Scale="10" />
+          <Property Name="Volume" Type="numeric" Precision="27" />
+          <Property Name="ModifiedDate" Type="datetime2" Nullable="false" />
+          <Property Name="ModifiedByID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Indicies">
+          <Key>
+            <PropertyRef Name="IndexID" />
+          </Key>
+          <Property Name="IndexID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="IndexCode" Type="nvarchar" MaxLength="30" />
+          <Property Name="CountryID" Type="int" Nullable="false" />
+          <Property Name="CultureID" Type="int" />
+        </EntityType>
+        <EntityType Name="IndustryGroup">
+          <Key>
+            <PropertyRef Name="IndustryGroupID" />
+          </Key>
+          <Property Name="IndustryGroupID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="500" />
+          <Property Name="CultureID" Type="int" />
+        </EntityType>
+        <EntityType Name="Language">
+          <Key>
+            <PropertyRef Name="LanguageID" />
+          </Key>
+          <Property Name="LanguageID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Security">
+          <Key>
+            <PropertyRef Name="SecurityID" />
+          </Key>
+          <Property Name="SecurityID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ISINCode" Type="nvarchar" MaxLength="30" />
+          <Property Name="Code" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="CompanyID" Type="int" />
+          <Property Name="SecurityTypeID" Type="int" />
+          <Property Name="ListingDate" Type="date" />
+        </EntityType>
+        <EntityType Name="SecurityDailyTransaction">
+          <Key>
+            <PropertyRef Name="SecurityDailyTransactionID" />
+          </Key>
+          <Property Name="SecurityDailyTransactionID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="TransactionDate" Type="datetime" Nullable="false" />
+          <Property Name="SecurityCode" Type="varchar" Nullable="false" MaxLength="6" />
+          <Property Name="OpenPrice" Type="numeric" Precision="27" Scale="10" />
+          <Property Name="LastPrice" Type="numeric" Precision="27" Scale="10" />
+          <Property Name="ChangedPrice" Type="numeric" Precision="27" Scale="10" />
+          <Property Name="ChangedPercentage" Type="numeric" Precision="27" Scale="10" />
+          <Property Name="BidPrice" Type="numeric" Precision="27" Scale="10" />
+          <Property Name="OfferPrice" Type="numeric" Precision="27" Scale="10" />
+          <Property Name="HighPrice" Type="numeric" Precision="27" Scale="10" />
+          <Property Name="LowPrice" Type="numeric" Precision="27" Scale="10" />
+          <Property Name="Volume" Type="numeric" Precision="27" />
+          <Property Name="StatusCode" Type="nvarchar" MaxLength="5" />
+          <Property Name="ModifiedDate" Type="datetime2" Nullable="false" />
+          <Property Name="ModifiedByID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SecurityType">
+          <Key>
+            <PropertyRef Name="SecurityTypeID" />
+          </Key>
+          <Property Name="SecurityTypeID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="CultureID" Type="int" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="255" />
+        </EntityType>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DataAnalytic.Domain.Entities" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="EFDbContext" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Companies" EntityType="DataAnalytic.Domain.Entities.Company" />
+          <EntitySet Name="Countries" EntityType="DataAnalytic.Domain.Entities.Country" />
+          <EntitySet Name="Cultures" EntityType="DataAnalytic.Domain.Entities.Culture" />
+          <EntitySet Name="IndexDailyTransactions" EntityType="DataAnalytic.Domain.Entities.IndexDailyTransaction" />
+          <EntitySet Name="Indicies" EntityType="DataAnalytic.Domain.Entities.Indicy" />
+          <EntitySet Name="IndustryGroups" EntityType="DataAnalytic.Domain.Entities.IndustryGroup" />
+          <EntitySet Name="Languages" EntityType="DataAnalytic.Domain.Entities.Language" />
+          <EntitySet Name="Securities" EntityType="DataAnalytic.Domain.Entities.Security" />
+          <EntitySet Name="SecurityDailyTransactions" EntityType="DataAnalytic.Domain.Entities.SecurityDailyTransaction" />
+          <EntitySet Name="SecurityTypes" EntityType="DataAnalytic.Domain.Entities.SecurityType" />
+        </EntityContainer>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="CompanyID" />
+          </Key>
+          <Property Name="CompanyID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="6" Unicode="true" FixedLength="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="500" Unicode="true" FixedLength="false" />
+          <Property Name="IndustryGroupID" Type="Int32" />
+          <Property Name="CultureID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="CountryID" />
+          </Key>
+          <Property Name="CountryID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="CultureID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="ISO3166A2" Type="String" MaxLength="2" Unicode="true" FixedLength="false" />
+          <Property Name="ISO3166A3" Type="String" MaxLength="3" Unicode="true" FixedLength="false" />
+          <Property Name="ISO3166NUM" Type="Int16" />
+        </EntityType>
+        <EntityType Name="Culture">
+          <Key>
+            <PropertyRef Name="CultureID" />
+          </Key>
+          <Property Name="CultureID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="LanguageID" Type="Int32" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
+          <Property Name="RFC1766LanguageTag" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="IndexDailyTransaction">
+          <Key>
+            <PropertyRef Name="IndexDailyTransactionID" />
+          </Key>
+          <Property Name="IndexDailyTransactionID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="TransactionDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IndexCode" Type="String" Nullable="false" MaxLength="30" Unicode="true" FixedLength="false" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="6" Unicode="true" FixedLength="false" />
+          <Property Name="ClosePrice" Type="Decimal" Precision="27" Scale="10" />
+          <Property Name="LastPrice" Type="Decimal" Precision="27" Scale="10" />
+          <Property Name="ChangedPrice" Type="Decimal" Precision="27" Scale="10" />
+          <Property Name="ChangedPercentage" Type="Decimal" Precision="27" Scale="10" />
+          <Property Name="TotalPrice" Type="Decimal" Precision="27" Scale="10" />
+          <Property Name="Volume" Type="Decimal" Precision="27" Scale="0" />
+          <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="ModifiedByID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Indicy">
+          <Key>
+            <PropertyRef Name="IndexID" />
+          </Key>
+          <Property Name="IndexID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="IndexCode" Type="String" MaxLength="30" Unicode="true" FixedLength="false" />
+          <Property Name="CountryID" Type="Int32" Nullable="false" />
+          <Property Name="CultureID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="IndustryGroup">
+          <Key>
+            <PropertyRef Name="IndustryGroupID" />
+          </Key>
+          <Property Name="IndustryGroupID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="500" Unicode="true" FixedLength="false" />
+          <Property Name="CultureID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Language">
+          <Key>
+            <PropertyRef Name="LanguageID" />
+          </Key>
+          <Property Name="LanguageID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Security">
+          <Key>
+            <PropertyRef Name="SecurityID" />
+          </Key>
+          <Property Name="SecurityID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ISINCode" Type="String" MaxLength="30" Unicode="true" FixedLength="false" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="30" Unicode="true" FixedLength="false" />
+          <Property Name="CompanyID" Type="Int32" />
+          <Property Name="SecurityTypeID" Type="Int32" />
+          <Property Name="ListingDate" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="SecurityDailyTransaction">
+          <Key>
+            <PropertyRef Name="SecurityDailyTransactionID" />
+          </Key>
+          <Property Name="SecurityDailyTransactionID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="TransactionDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SecurityCode" Type="String" Nullable="false" MaxLength="6" Unicode="false" FixedLength="false" />
+          <Property Name="OpenPrice" Type="Decimal" Precision="27" Scale="10" />
+          <Property Name="LastPrice" Type="Decimal" Precision="27" Scale="10" />
+          <Property Name="ChangedPrice" Type="Decimal" Precision="27" Scale="10" />
+          <Property Name="ChangedPercentage" Type="Decimal" Precision="27" Scale="10" />
+          <Property Name="BidPrice" Type="Decimal" Precision="27" Scale="10" />
+          <Property Name="OfferPrice" Type="Decimal" Precision="27" Scale="10" />
+          <Property Name="HighPrice" Type="Decimal" Precision="27" Scale="10" />
+          <Property Name="LowPrice" Type="Decimal" Precision="27" Scale="10" />
+          <Property Name="Volume" Type="Decimal" Precision="27" Scale="0" />
+          <Property Name="StatusCode" Type="String" MaxLength="5" Unicode="true" FixedLength="false" />
+          <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="ModifiedByID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SecurityType">
+          <Key>
+            <PropertyRef Name="SecurityTypeID" />
+          </Key>
+          <Property Name="SecurityTypeID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="CultureID" Type="Int32" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DataAnalyticDomainEntitiesStoreContainer" CdmEntityContainer="EFDbContext">
+          <EntitySetMapping Name="Companies">
+            <EntityTypeMapping TypeName="DataAnalytic.Domain.Entities.Company">
+              <MappingFragment StoreEntitySet="Company">
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IndustryGroupID" ColumnName="IndustryGroupID" />
+                <ScalarProperty Name="CultureID" ColumnName="CultureID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Countries">
+            <EntityTypeMapping TypeName="DataAnalytic.Domain.Entities.Country">
+              <MappingFragment StoreEntitySet="Country">
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+                <ScalarProperty Name="CultureID" ColumnName="CultureID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="ISO3166A2" ColumnName="ISO3166A2" />
+                <ScalarProperty Name="ISO3166A3" ColumnName="ISO3166A3" />
+                <ScalarProperty Name="ISO3166NUM" ColumnName="ISO3166NUM" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cultures">
+            <EntityTypeMapping TypeName="DataAnalytic.Domain.Entities.Culture">
+              <MappingFragment StoreEntitySet="Culture">
+                <ScalarProperty Name="CultureID" ColumnName="CultureID" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="LanguageID" ColumnName="LanguageID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="RFC1766LanguageTag" ColumnName="RFC1766LanguageTag" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IndexDailyTransactions">
+            <EntityTypeMapping TypeName="DataAnalytic.Domain.Entities.IndexDailyTransaction">
+              <MappingFragment StoreEntitySet="IndexDailyTransaction">
+                <ScalarProperty Name="IndexDailyTransactionID" ColumnName="IndexDailyTransactionID" />
+                <ScalarProperty Name="TransactionDate" ColumnName="TransactionDate" />
+                <ScalarProperty Name="IndexCode" ColumnName="IndexCode" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="ClosePrice" ColumnName="ClosePrice" />
+                <ScalarProperty Name="LastPrice" ColumnName="LastPrice" />
+                <ScalarProperty Name="ChangedPrice" ColumnName="ChangedPrice" />
+                <ScalarProperty Name="ChangedPercentage" ColumnName="ChangedPercentage" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="Volume" ColumnName="Volume" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedByID" ColumnName="ModifiedByID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Indicies">
+            <EntityTypeMapping TypeName="DataAnalytic.Domain.Entities.Indicy">
+              <MappingFragment StoreEntitySet="Indicies">
+                <ScalarProperty Name="IndexID" ColumnName="IndexID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IndexCode" ColumnName="IndexCode" />
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+                <ScalarProperty Name="CultureID" ColumnName="CultureID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IndustryGroups">
+            <EntityTypeMapping TypeName="DataAnalytic.Domain.Entities.IndustryGroup">
+              <MappingFragment StoreEntitySet="IndustryGroup">
+                <ScalarProperty Name="IndustryGroupID" ColumnName="IndustryGroupID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CultureID" ColumnName="CultureID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Languages">
+            <EntityTypeMapping TypeName="DataAnalytic.Domain.Entities.Language">
+              <MappingFragment StoreEntitySet="Language">
+                <ScalarProperty Name="LanguageID" ColumnName="LanguageID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Securities">
+            <EntityTypeMapping TypeName="DataAnalytic.Domain.Entities.Security">
+              <MappingFragment StoreEntitySet="Security">
+                <ScalarProperty Name="SecurityID" ColumnName="SecurityID" />
+                <ScalarProperty Name="ISINCode" ColumnName="ISINCode" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="SecurityTypeID" ColumnName="SecurityTypeID" />
+                <ScalarProperty Name="ListingDate" ColumnName="ListingDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SecurityDailyTransactions">
+            <EntityTypeMapping TypeName="DataAnalytic.Domain.Entities.SecurityDailyTransaction">
+              <MappingFragment StoreEntitySet="SecurityDailyTransaction">
+                <ScalarProperty Name="SecurityDailyTransactionID" ColumnName="SecurityDailyTransactionID" />
+                <ScalarProperty Name="TransactionDate" ColumnName="TransactionDate" />
+                <ScalarProperty Name="SecurityCode" ColumnName="SecurityCode" />
+                <ScalarProperty Name="OpenPrice" ColumnName="OpenPrice" />
+                <ScalarProperty Name="LastPrice" ColumnName="LastPrice" />
+                <ScalarProperty Name="ChangedPrice" ColumnName="ChangedPrice" />
+                <ScalarProperty Name="ChangedPercentage" ColumnName="ChangedPercentage" />
+                <ScalarProperty Name="BidPrice" ColumnName="BidPrice" />
+                <ScalarProperty Name="OfferPrice" ColumnName="OfferPrice" />
+                <ScalarProperty Name="HighPrice" ColumnName="HighPrice" />
+                <ScalarProperty Name="LowPrice" ColumnName="LowPrice" />
+                <ScalarProperty Name="Volume" ColumnName="Volume" />
+                <ScalarProperty Name="StatusCode" ColumnName="StatusCode" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedByID" ColumnName="ModifiedByID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SecurityTypes">
+            <EntityTypeMapping TypeName="DataAnalytic.Domain.Entities.SecurityType">
+              <MappingFragment StoreEntitySet="SecurityType">
+                <ScalarProperty Name="SecurityTypeID" ColumnName="SecurityTypeID" />
+                <ScalarProperty Name="CultureID" ColumnName="CultureID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

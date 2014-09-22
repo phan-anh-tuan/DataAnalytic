@@ -1,0 +1,14 @@
+﻿@using System.Collections
+@model IEnumerable<string>
+
+@{
+    ViewBag.Title = "GetVideos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>GetVideos</h2>
+@foreach (string url in Model)
+{
+    var fullURL = "http://www.youtube.com/embed/" + url;
+    <iframe width="420" height="345" src="@fullURL"></iframe>
+}

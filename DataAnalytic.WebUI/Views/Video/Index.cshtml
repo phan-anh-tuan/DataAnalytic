@@ -1,0 +1,137 @@
+﻿@using DataAnalytic.Domain.Entities
+@using DataAnalytic.WebUI.Models
+@using DataAnalytic.WebUI.HtmlHelpers
+
+@model VideosListViewModel
+@{
+    ViewBag.Title = "Video List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    label, input { display:block; }
+</style>
+<script type="text/javascript">
+
+    function OnBegin(id, message) {
+        var divId = "#table_video_status_" + id;
+        var target = $(divId);
+        target.empty();
+        target.append("<p>" + message + "</p>");
+    }
+
+</script>
+<script type="text/javascript">
+    var openEditDialog;
+
+    $(function () {
+
+        var dialog, form, videoId
+
+        openEditDialog = function (id) {
+            videoId = id;
+            dialog.dialog('open');
+        };
+
+        function edit() {
+            //var keywords = $("#keywords");
+
+            //$.get('/YouTubeVideoManager/Search', { keywords: keywords.val() }, function (data) { alert(data); dialog.dialog("close"); })
+
+            var video = {
+                ID: $("form[action^='/Video/Edit'] > input[id='ID']").val(),
+                TvChannel: $("#TvChannel").val(),
+                URL: $("#URL").val(),
+                Title: $("#Title").val(),
+                Description: $("#Description").val(),
+                Category: $("#Category").val(),
+                Tags: $("#Tags").val(),
+                YoutubeId: $("#YoutubeId").val(),
+                IsAvailable: $("#IsAvailable").val(),
+                UpdatedDate: $("#UpdatedDate").val()
+            };
+
+            $.post('/Video/Edit', video, function (data) { if (data = "success") dialog.dialog("close"); });
+
+        };
+         
+        dialog = $("#dialog-form").dialog({
+            autoOpen: false,
+            height: 600,
+            width: 500,
+            modal: true,
+            buttons: {
+                "OK": edit,
+                Cancel: function () {
+                    dialog.dialog("close");
+                }
+            },
+            open: function () {
+                //alert(videoId);
+                $.get('/Video/Edit', { videoId: videoId }, function (data) {
+                    var target = $("#dialog-form");
+                    target.empty();
+                    target.append(data);
+                })
+            },
+            close: function () {
+                //var target = $("#dialog-form");
+               
+                //alert('prepare to close the dialog');
+            }
+        });
+
+        //form = dialog.find("form[action^='/Video/Edit']").on("submit", function (event) {
+        //    event.preventDefault();
+        //    edit();
+        //});
+
+        //$("#create-user").button().on("click", function () {
+        //   dialog.dialog("open");
+        //});
+
+       
+    });
+</script>
+
+<table>
+    <thead>
+        <tr>
+            <th>Channel</th>
+            <th>Url</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Tags</th>
+            <th>Status</th>
+            <th>Action</th>
+            <th>YouTube</th>
+        </tr>
+    </thead>
+    <tbody id="tableBody">
+        @foreach (Video v in Model.Videos)
+        {
+            Html.RenderPartial("VideoDetail", v);
+        }
+    </tbody>
+</table>
+
+<div class="pager">
+    @Html.PageLinks(Model.PagingInfo, x => Url.Action("Index", new { page = x, selectedTvChannel = Model.CurrentTvChannel }))
+</div>
+
+@{ Html.RenderAction("GetTvChannels");}
+
+@*<button id="create-user">Open Search Form</button>*@
+
+<div id="dialog-form" title="Edit Video">
+    @*<p class="validateTips">All form fields are required.</p>
+    <form>
+        <fieldset>
+            <label for="keywords">Key words</label>
+            <input type="text" name="keywords" id="keywords" value="" class="text ui-widget-content ui-corner-all">
+           <!-- Allow form submission with keyboard without duplicating the dialog button -->
+            <input type="submit" tabindex="-1" style="position: absolute; top: -1000px">
+        </fieldset>
+    </form>*@
+</div>

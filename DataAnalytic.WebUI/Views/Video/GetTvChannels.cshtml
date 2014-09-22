@@ -1,0 +1,38 @@
+﻿@model IEnumerable<string>
+
+@{
+    AjaxOptions ajaxOpts = new AjaxOptions
+    {
+        UpdateTargetId = "tableBody",
+        OnSuccess = "OnSuccess"
+    };
+}
+<script type="text/javascript">
+    function OnSuccess(data) {
+        var target = $("#tableBody");
+        
+        target.empty();
+        for (var i = 0; i < data.Videos.length; i++) {
+            var video = data.Videos[i];
+            var status = "";
+            var action = "";
+            if (video.IsAvailable) {
+                status = "downloaded";
+            } else {
+                action = '<form action="/Video/DownloadVideo" data-ajax="true" data-ajax-loading="#loading" data-ajax-loading-duration="1000" data-ajax-mode="replace" data-ajax-update="#table_video_status_' + video.ID + '" id="form0" method="post"><input data-val="true" data-val-number="The field ID must be a number." data-val-required="The ID field is required." id="ID" name="ID" type="hidden" value="' + video.ID + '"><button type="submit">DownLoad</button></form>';
+            }
+                 
+            target.append("<tr><td>" + video.TvChannel + "</td><td>" + video.URL + "</td><td id='table_video_status_" + video.ID + "'>" + status + "</td><td>" + action + "</td></tr>");
+        }
+    }
+</script>
+
+@*@using (Ajax.BeginForm("Index",ajaxOpts)){}*@
+
+@using (Html.BeginForm("Index","Video"))
+{
+    <div id="tvChannel">
+        @Html.DropDownList("selectedTvChannel", new SelectList(Model.ToArray<string>()))
+        <button type="submit">Submit</button>
+    </div>
+}

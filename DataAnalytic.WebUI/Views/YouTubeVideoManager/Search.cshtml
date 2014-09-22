@@ -1,0 +1,92 @@
+﻿@model Dictionary<string, string>
+
+@{
+    ViewBag.Title = "Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    var openVideoViewer;
+
+    $(function () {
+
+        var dialog, viewUrl, downloadUrl
+
+        var loadingPanel = $("#downloading_panel");
+
+        openVideoViewer = function (view, download) {
+            viewUrl = view;
+            downloadUrl = download;
+            dialog.dialog('open');
+        };
+
+        dialog = $("#dialog-form").dialog({
+            autoOpen: false,
+            height: 480,
+            width: 600,
+            modal: true,
+            buttons: {
+                "Close": function () { dialog.dialog("close") },
+                "Download": function () {
+                    loadingPanel.show();
+                    $.get("/YouTubeVideoManager/DownloadYoutubeVideo", { link: downloadUrl }, function (data) {
+                        if (data) loadingPanel.hide();
+                    });
+                }
+            },
+            open: function () {
+                var iframe = $("#dialog-form > iframe");
+                if (iframe) iframe.remove();
+                target = $("#dialog-form");
+                target.append("<iframe width='560' height='315' src='" + viewUrl + "' frameborder='0' allowfullscreen></iframe>");
+            },
+            close: function () {
+                loadingPanel.hide();
+            }
+        });
+
+        //$("#open-video-viewer").button().on("click", function () {
+        //   dialog.dialog("open");
+        //});
+    });
+</script>
+
+<h2>Search</h2>
+@using (Html.BeginForm())
+{
+    @Html.TextBox("keywords");
+    <button type="submit">Search</button>
+}
+<div id="search_result">
+    @if (Model != null)
+    {
+        foreach (KeyValuePair<string, string> entry in Model)
+        {
+            var urls = entry.Key.Split(';');
+            var downloadUrl = urls[1]; // entry.Key.Substring(entry.Key.IndexOf(";") + 1);
+            var viewUrl = urls[0]; // entry.Key.Substring(0, entry.Key.IndexOf(";"));
+            var thumbnailUrl = urls[2];
+            var contents = entry.Value.Split(';');
+            var videoTitle = contents[0];
+            var videoChannel = contents[1];
+        <div style="border: 1px solid black; background-color:#eee; margin-bottom: 15px; padding-left: 10px">
+            <p>
+                <a href="javascript:void(0)" onclick="return openVideoViewer('@viewUrl','@downloadUrl');">
+                    <img src="@thumbnailUrl"/>
+                </a>
+            </p>
+            <p>@videoTitle</p>
+            <p>@videoChannel</p>
+        </div>
+        }
+    }
+</div>
+
+
+<div id="dialog-form" title="View Video">
+    <div id="downloading_panel" style="display: none">
+        <p>Dowloading...</p>
+    </div>
+</div>
+
+@*<button id="open-video-viewer">Open Viewer</button>*@

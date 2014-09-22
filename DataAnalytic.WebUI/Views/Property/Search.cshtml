@@ -1,0 +1,258 @@
+﻿@using DataAnalytic.Domain.Entities;
+@model IEnumerable<AuctionResult>
+
+
+@{
+    ViewBag.Title = "Property Search";
+}
+
+<style type="text/css">
+    .borderless-textbox {
+        border: none;
+        outline: none;
+        -webkit-appearance: none;
+    }
+    table {
+        border: 1px solid;
+        margin-top:2em;
+    }
+    td {
+        padding-left:0.3em;
+        padding-right:0.3em;    
+    }
+    button {
+      margin-top:1em;
+      margin-left : 22em;
+    }
+</style>
+
+
+<script type="text/javascript">
+    Number.prototype.toCurrencyString = function(prefix, suffix) 
+        { 
+            return prefix + (~~this).toLocaleString() + (this % 1).toFixed(0).toLocaleString().replace(/^[+-]?0/,'') + suffix; 
+        };
+    $(function () {
+        var minNoBedroom = $("#min_no_bedroom_slider").slider({
+            //orientation: "vertical",
+            range: "min",
+            @{
+                var minVal = "0";
+
+                if (!string.IsNullOrWhiteSpace(Request.Params["MinNoOfBedroom"]))
+                {
+                    minVal = @Request.Params["MinNoOfBedroom"];
+                }
+
+   
+}
+            value: @minVal,
+            min: 0,
+            max: 10,
+            slide: function (event, ui) {
+                // While sliding, update the value in the #amount div element
+                $("#MinNoOfBedroom").val(ui.value);
+            }
+        });
+        
+        var maxNoBedroom = $("#max_no_bedroom_slider").slider({
+            //orientation: "vertical",
+            range: "min",
+            @{
+                var maxVal = "0";
+                if (!string.IsNullOrWhiteSpace(Request.Params["MaxNoOfBedroom"]))
+                {
+                    maxVal = @Request.Params["MaxNoOfBedroom"];
+                }
+            }
+            value: @maxVal,
+            min: 0,
+            max: 10,
+            slide: function (event, ui) {
+                // While sliding, update the value in the #amount div element
+                $("#MaxNoOfBedroom").val(ui.value);
+            }
+        });
+
+        var minPrice = $("#min_price_slider").slider({
+            //orientation: "vertical",
+            range: "min",
+            @{
+                var minPrice = "0";
+                if (!string.IsNullOrWhiteSpace(Request.Params["MinPrice"]))
+                {
+                    minPrice = @Request.Params["MinPrice"];
+                }
+            }
+            value: @minPrice,
+            min: 0,
+            max: 1000000,
+            step: 25000,
+            slide: function (event, ui) {
+                // While sliding, update the value in the #amount div element
+                $("#MinPriceDisplay").val((ui.value).toCurrencyString('$',''));
+                $("#MinPrice").val(ui.value);
+            }
+        });
+        
+        
+        $("#MinPriceDisplay").val($('#min_price_slider').slider("option", "value").toCurrencyString('$',''));
+
+        
+
+        var maxPrice = $("#max_price_slider").slider({
+            //orientation: "vertical",
+            range: "min",
+            @{
+                var maxPrice = "0";
+                if (!string.IsNullOrWhiteSpace(Request.Params["MaxPrice"]))
+                {
+                    maxPrice = @Request.Params["MaxPrice"];
+                }
+            }
+            value: @maxPrice,
+            min: 0,
+            max: 1000000,
+            step: 25000,
+            slide: function (event, ui) {
+                // While sliding, update the value in the #amount div element
+                $("#MaxPriceDisplay").val((ui.value).toCurrencyString('$',''));
+                $("#MaxPrice").val(ui.value);
+            }
+        });
+        $("#MaxPriceDisplay").val($('#max_price_slider').slider("option", "value").toCurrencyString('$',''));
+        
+
+        $(".suburb-select").chosen({disable_search_threshold:10});
+        $(".property-type-select").chosen({disable_search_threshold:10});
+        $(".city-select").chosen({disable_search_threshold:10});
+        $("button").button();
+    });
+</script>
+<h2>Search</h2>
+
+
+@using (Html.BeginForm("Search", "Property", FormMethod.Get))
+{
+    <div>
+        <div id="date-div" style="display: block">
+            <div style="float:left">FromDate: @Html.TextBox("FromDate", null, new { @class = "datefield", type = "date" }) </div>
+            <div style="margin-left:25em">ToDate: @Html.TextBox("ToDate", null, new { @class = "datefield", type = "date" })</div>
+        </div>
+        <div id="date-div" style="display: block; margin-top:1em">
+            <div style="float:left">City: @Html.DropDownList("City", null, new { @class = "city-select"})</div>
+            @*<div style="margin-left:25em">Suburb: @Html.DropDownList("Suburb", null, new { @class= "suburb-select"})</div>*@
+            <div style="margin-left:25em">Suburb: @Html.ListBox("Suburb", null, new { @class= "suburb-select"})</div>
+        </div>
+        @*<p>Type: @Html.DropDownList("Type", null, new { @class="property-type-select"})</p>*@
+        <p>Type: @Html.ListBox("Type", null, new { @class="property-type-select"})</p>
+        <div id="bedroom-div" style="display: inline-block">
+            <div style="float:left">
+                <div style="display: block">Min No of Bedroom: @Html.TextBox("MinNoOfBedroom", null, new { @class = "borderless-textbox", @readonly = "true" })</div>
+                <div id="min_no_bedroom_slider" style="width: 10em"></div>
+            </div>
+            <div style="margin-left:25em">
+                <div style="display: block">Max No of Bedroom: @Html.TextBox("MaxNoOfBedroom", null, new { @class = "borderless-textbox", @readonly = "true" })</div>
+                <div id="max_no_bedroom_slider" style="width: 10em"></div>
+            </div>
+        </div>
+        <div id="price-div" style="display: block; margin-top: 2em">
+            <div style="float:left">
+                <div style="display: block">Min Price: @Html.TextBox("MinPriceDisplay", null, new { @class = "borderless-textbox", @readonly = "true" })</div>
+                <div id="min_price_slider" style="width: 15em"></div>
+                @Html.Hidden("MinPrice", null, new { @class = "borderless-textbox", @readonly = "true" })
+            </div>
+            <div style="margin-left: 25em;">
+                <div style="display: block">Max Price: @Html.TextBox("MaxPriceDisplay", null, new { @class = "borderless-textbox", @readonly = "true" })</div>
+                <div id="max_price_slider" style="width: 15em"></div>
+                 @Html.Hidden("MaxPrice", null, new { @class = "borderless-textbox", @readonly = "true" })
+            </div>
+        </div>
+        
+        <button type="submit">Submit</button>
+    </div>
+}
+<div>
+    <table border="1px solid;">
+        <thead>
+            <tr>
+                <th>TransactionDate</th>
+                <th>Suburb</th>
+                <th>Address</th>
+                <th>Type</th>
+                <th>No Of Bedroom</th>
+                <th>Price</th>
+                <th>Result</th>
+                <th>City</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TransactionDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Suburb)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NoOfBedroom)
+                    </td>
+                    <td>
+                        @String.Format("{0:c}", item.Price)
+                    </td>
+                    <td>
+                        @switch (item.Result)
+                        {
+                            case "S": // Sold
+                                @:Sold
+                                break;
+                            case "SP": // Sold Prior
+                                @:Sold Prior
+                                break;
+                            case "PI": // Passed In
+                                @:Passed In
+                                break;
+                            case "PN": // Sold Prior Not Disclosed
+                                @:Sold Prior - Price Not Disclosed
+                                break;
+                            case "SN": // Sold Not Disclosed
+                                @:Sold - Price Not Disclosed
+                                break;
+                            case "NB": // No Bid
+                                @:No Bid
+                                break;
+                            case "VB": // Vendor Bid
+                                @:Vendor Prior
+                                break;
+                            case "W": // Withdrawn Prior To Auction
+                                @:Withdrawn Prior To Auction
+                                break;
+                            case "SA": // Sold After Auction
+                                @:Sold After Auction
+                                break;
+                            case "SS": // Sold After Auction Price Not Disclosed
+                                @:Sold After Auction - Price Not Disclosed
+                                break;
+                            case "N/A": // Price Or Highest Bid Not Available
+                                @:Price Not Disclosed
+                                break;
+                        }
+                        @*@Html.DisplayFor(modelItem => item.Result)*@
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.City)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

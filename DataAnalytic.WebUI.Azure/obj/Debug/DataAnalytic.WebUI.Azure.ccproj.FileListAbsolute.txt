@@ -1,0 +1,1 @@
+C:\Users\phanat01\documents\visual studio 2012\Projects\DataAnalytic\DataAnalytic.WebUI.Azure\bin\Debug\ServiceConfiguration.cscfg

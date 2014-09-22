@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<job-scheduling-data xmlns="http://quartznet.sourceforge.net/JobSchedulingData"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ 				version="2.0">
+  <schedule>
+    <job>
+      <name>ASXDownloader</name>
+      <group>SecurityJobs</group>
+      <description>Download stocks data from ASX</description>
+      <job-type>DataAnalytic.WebUI.Business.Concrete.ASXDownloader, DataAnalytic.WebUI</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+      <job-data-map>
+        <entry>
+          <key>UrlPattern</key>
+          <value><![CDATA[http://www.asx.com.au/asx/markets/equityPrices.do?asxCodes={0}&by=asxCodes]]></value>
+        </entry>
+      </job-data-map>
+    </job>
+
+    <job>
+      <name>ASXDataPersistence</name>
+      <group>SecurityJobs</group>
+      <description>Persist stocks data to Database</description>
+      <job-type>DataAnalytic.WebUI.Business.Concrete.ASXDownloader, DataAnalytic.WebUI</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    
+    <job>
+      <name>AustraliaRealEstateAuctionResultDownloader</name>
+      <group>RealEstateJobs</group>
+      <description>Download auction result from homepriceguide</description>
+      <job-type>DataAnalytic.WebUI.Business.Concrete.REAuctionResultDownloader, DataAnalytic.WebUI</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+      <job-data-map>
+        <entry>
+          <key>UrlPattern</key>
+          <value><![CDATA[http://www.homepriceguide.com.au/saturday_auction_results/{0}]]></value>
+        </entry>
+        <entry>
+          <key>cities</key>
+          <value><![CDATA[Sydney,Melbourne,Brisbane,Adelaide,sydney_domain]]></value>
+        </entry>
+      </job-data-map>
+    </job>
+
+    <job>
+      <name>RSAuctionDataPersistence</name>
+      <group>RealEstateJobs</group>
+      <description>persist auction result to database</description>
+      <job-type>DataAnalytic.WebUI.Business.Concrete.REAuctionResultDownloader, DataAnalytic.WebUI</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    
+    <trigger>
+      <cron>
+        <name>ASXTrigger</name>
+        <group>SecurityJobs</group>
+        <description>Daily trigger to download stock data from ASX</description>
+        <job-name>ASXDownloader</job-name>
+        <job-group>SecurityJobs</job-group>
+        <cron-expression>0 47 12 ? * MON-FRI</cron-expression> 
+        <!--every week days at 12:00-->
+      </cron>
+    </trigger>
+    
+    <trigger>
+      <cron>
+        <name>ASXDataPersistenceTrigger</name>
+        <group>SecurityJobs</group>
+        <description>Daily trigger to persist stock data to Database</description>
+        <job-name>ASXDataPersistence</job-name>
+        <job-group>SecurityJobs</job-group>
+        <cron-expression>0 0 13 ? * MON-FRI</cron-expression>
+        <!--every week days at 15:00-->
+      </cron>
+    </trigger>
+    
+    <trigger>
+      <cron>
+        <name>RSAuctionResultTrigger</name>
+        <group>RealEstateJobs</group>
+        <description>Weekly trigger to download auction result from homepriceguide</description>
+        <job-name>AustraliaRealEstateAuctionResultDownloader</job-name>
+        <job-group>RealEstateJobs</job-group>
+        <cron-expression>0 28 11 ? * FRI</cron-expression>  
+        <!--every wednesday at 12:00-->
+      </cron>
+    </trigger>
+
+    <trigger>
+      <cron>
+        <name>RSAuctionDataPersistenceTrigger</name>
+        <group>RealEstateJobs</group>
+        <description>Daily trigger to persist auction data to Database</description>
+        <job-name>RSAuctionDataPersistence</job-name>
+        <job-group>RealEstateJobs</job-group>
+        <cron-expression>0 40 14 ? * WED</cron-expression>
+        <!--every wednesday at 15:00-->
+      </cron>
+    </trigger>
+  
+  </schedule>
+</job-scheduling-data>

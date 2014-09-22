@@ -1,0 +1,10 @@
+﻿@model DataAnalytic.Domain.Entities.Video
+
+@{
+    Layout = null;
+}
+@using (Html.BeginForm())
+{
+    @Html.EditorForModel()
+    <input type="submit" tabindex="-1" style="position: absolute; top: -1000px">
+}

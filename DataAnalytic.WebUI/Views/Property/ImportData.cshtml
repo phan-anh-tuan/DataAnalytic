@@ -1,0 +1,50 @@
+﻿@model IEnumerable<string>
+
+@{
+    ViewBag.Title = "ImportData";
+}
+
+@{
+    AjaxOptions ajaxOpts = new AjaxOptions
+    {
+       HttpMethod="Post",
+       OnSuccess = "NotifyUser"
+    };
+}
+
+<h2>Import Property Auction Data</h2>
+<script>
+    $(function () {
+        $("button").button();
+          
+    });
+
+    function NotifyUser(data, textStatus, jqXHR) {
+        
+        if (data) {
+            alert('data imported done');
+        } else {
+            alert('data imported failed');
+        }
+    }
+</script>
+<table>
+    <tr>
+        <th>Transaction Date</th>
+        <th>Action</th>
+    </tr>
+    @foreach (var directoryName in Model)
+    {
+        <tr>
+            <td>
+                @directoryName
+            </td>
+            <td>@using (Ajax.BeginForm("ImportData", ajaxOpts))
+                {
+                    @Html.Hidden("containerFolder", directoryName);
+                   <button type="submit">Import Data</button>
+                }
+            </td>
+        </tr>
+    }
+</table>

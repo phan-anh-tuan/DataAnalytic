@@ -1,0 +1,57 @@
+﻿@using DataAnalytic.Domain.Entities
+@using System.Web
+@model Video
+
+@{
+    AjaxOptions ajaxOpts = new AjaxOptions
+    {
+        UpdateTargetId = "table_video_status_" + Model.ID,
+        //LoadingElementId = "loading_" + Model.ID,
+        //LoadingElementDuration = 1000,
+        OnBegin="OnBegin('" + Model.ID + "','Downloading....')",
+    };
+}
+
+<tr>
+    <td>@Model.TvChannel</td>
+    <td><a href="javascript:void(0);" onclick="return openEditDialog(@Model.ID);">@Model.URL</a></td>
+    <td>@MvcHtmlString.Create(HttpUtility.HtmlEncode(Model.Title))</td>
+    <td>@Model.Description</td>
+    <td>@Model.Category</td>
+    <td>@Model.Tags</td>
+    <td id="table_video_status_@Model.ID">@{
+        if (Model.IsAvailable && !string.IsNullOrEmpty(Model.YouTubeId))
+        { 
+            @:Available
+        } else if (Model.IsAvailable) {
+            @:Downloaded
+        }
+    }
+    @*    <div id="loading_@Model.ID" style="display: none">
+            <p>Processing...</p>
+        </div>*@
+    </td>
+    <td>
+        @if (!Model.IsAvailable)
+        {
+            using (Ajax.BeginForm("DownloadVideo", ajaxOpts))
+            {
+            @Html.HiddenFor(ds => ds.ID);
+            <button type="submit">DownLoad</button>
+            }
+        }
+    </td>
+    <td>
+        @if (string.IsNullOrEmpty(Model.YouTubeId))
+        {
+            using (Ajax.BeginForm("UploadVideo", "YouTubeVideoManager", new AjaxOptions {
+                                                    UpdateTargetId = "table_video_status_" + Model.ID,
+                                                    OnBegin="OnBegin('" + Model.ID + "','Uploading....')",
+                                                    }))
+            {
+            @Html.HiddenFor(ds => ds.ID);
+            <button type="submit">Upload</button>
+            }
+        }
+    </td>
+</tr>
