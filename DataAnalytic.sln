@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2012 for Web
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAnalytic.Tests", "DataAnalytic.Tests\DataAnalytic.Tests.csproj", "{917143E3-6465-4571-9BD7-6E183CF44696}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAnalytic.Domain", "DataAnalytic.Domain\DataAnalytic.Domain.csproj", "{75F449FE-3B28-4634-B345-590C0CA9383D}"
@@ -8,8 +10,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAnalytic.WebUI", "DataAnalytic.WebUI\DataAnalytic.WebUI.csproj", "{9661B69F-BC17-4C3F-87BA-696E3A5F1BDC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutubeExtractor", "YoutubeExtractor\YoutubeExtractor.csproj", "{ECDC127F-8DEF-4F99-8300-72C13597339D}"
-EndProject
-Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "DataAnalytic.WebUI.Azure", "DataAnalytic.WebUI.Azure\DataAnalytic.WebUI.Azure.ccproj", "{C409DF0F-7639-4005-9972-68962371C211}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,10 +33,6 @@ Global
 		{ECDC127F-8DEF-4F99-8300-72C13597339D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECDC127F-8DEF-4F99-8300-72C13597339D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECDC127F-8DEF-4F99-8300-72C13597339D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C409DF0F-7639-4005-9972-68962371C211}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C409DF0F-7639-4005-9972-68962371C211}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C409DF0F-7639-4005-9972-68962371C211}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C409DF0F-7639-4005-9972-68962371C211}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
