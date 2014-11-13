@@ -56,6 +56,7 @@ namespace DataAnalytic.WebUI.Controllers
         [Authorize(Users="quyennguyen,tuanphan")]
         public ActionResult Search(PropertySearchCriteria search)
         {
+
             var Suburbs = new List<string>();
 
             var suburbQry = from result in repository.GetDataSet

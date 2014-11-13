@@ -41,5 +41,20 @@ namespace DataAnalytic.Domain.Entities
 
         [Required(ErrorMessage = "Please enter City")]
         public string City { get; set; }
+
+        public override string ToString()
+        {
+            StringBuilder text = new StringBuilder();
+            text.Append("TransactionDate=").Append(TransactionDate.ToString("yyyy-MM-dd"));
+            text.Append("; Suburb=").Append(Suburb);
+            text.Append("; Address=").Append(Address);
+            text.Append("; Type=").Append(Type);
+            text.Append("; NoOfBedroom=").Append(NoOfBedroom);
+            text.Append("; Price=").Append(String.Format("{0:c}",Price));
+            text.Append("; Result=").Append(Result);
+            text.Append("; Agent=").Append(Agent);
+            text.Append("; City=").Append(City);
+            return text.ToString();
+        }
     }
 }

@@ -188,6 +188,22 @@ namespace DataAnalytic.WebUI.Business.Concrete
             } // end foreach
         }
 
+        private string getPropertyType(string val)
+        {
+            switch (val)
+            {
+                case "t":
+                    return "town house";
+                case "u":
+                    return "unit";
+                case "h":
+                    return "house";
+                case "studio":
+                    return "studio";
+                default:
+                    return "";
+            }
+        }
         private void PersistingHtmFiles(DateTime today)
         {
             DirectoryInfo dir = new DirectoryInfo(Path.Combine(FileUtility.BaseFilePath, "homepriceguide", today.ToString("yyyy-MM-dd"), "paging"));
@@ -197,10 +213,11 @@ namespace DataAnalytic.WebUI.Business.Concrete
             HtmlDocument doc = new HtmlDocument();
             AuctionResult auctionResult = null;
             DataAnalytic.Domain.Concrete.EFAuctionResultRepository auctionResultRepository = new DataAnalytic.Domain.Concrete.EFAuctionResultRepository();
-            int counter = -1;
+            
             #region foreach file
             foreach (var file in files)
             {
+                int counter = -1;
                 logWriter.Write(string.Format("processing file {0}", file.FullName));
                 string city = (file.Name.IndexOf("_") > 0) ? file.Name.Substring(0, file.Name.IndexOf("_")) : file.Name.Substring(0, file.Name.IndexOf(".htm"));
                 FileStream fs = file.OpenRead();
@@ -254,6 +271,22 @@ namespace DataAnalytic.WebUI.Business.Concrete
                                                 if (auctionResult != null)
                                                 {
                                                     auctionResult.Address = span.InnerText.Trim();
+                                                    logWriter.Write(string.Format("processing property at {0}", auctionResult.Address));
+                                                    if (span.Descendants("span").Count<HtmlNode>() > 0)
+                                                    {
+                                                        counter++;
+                                                        List<HtmlNode> descendents = span.Descendants().ToList<HtmlNode>();
+                                                        
+                                                        foreach (var node in descendents)
+                                                        {
+                                                            if (node.Name.ToUpper().Equals("SPAN"))
+                                                            {
+                                                                auctionResult.NoOfBedroom = int.Parse(node.InnerText.Trim());
+                                                                string[] propertyType = descendents[descendents.Count - 1].InnerText.Trim().Split(' ');
+                                                                auctionResult.Type = getPropertyType(propertyType[propertyType.Length - 1]);
+                                                            }
+                                                        }
+                                                    }
                                                 }
                                                 break;
                                             case 2: //type
@@ -287,18 +320,9 @@ namespace DataAnalytic.WebUI.Business.Concrete
                                                         }
                                                         else
                                                         {
-                                                            switch (val)
-                                                            {
-                                                                case "t":
-                                                                    auctionResult.Type = "town house";
-                                                                    break;
-                                                                case "u":
-                                                                    auctionResult.Type = "unit";
-                                                                    break;
-                                                                case "h":
-                                                                    auctionResult.Type = "house";
-                                                                    break;
-                                                            }
+
+                                                            auctionResult.Type = getPropertyType(val);
+                                                          
                                                         }
                                                     }
                                                     if (auctionResult.Type == null)
@@ -326,6 +350,7 @@ namespace DataAnalytic.WebUI.Business.Concrete
                                                 if (auctionResult != null)
                                                 {
                                                     auctionResult.Agent = span.InnerText.Trim();
+                                                    //logWriter.Write(auctionResult);
                                                     auctionResultRepository.Append(auctionResult);
                                                     //auctionResultRepository.AddOrUpdate(auctionResult);
                                                 }
@@ -336,7 +361,7 @@ namespace DataAnalytic.WebUI.Business.Concrete
                                 }
                             }
                         }
-                    }
+                    }   
                 }
                 #endregion foreach span
                 auctionResultRepository.SaveChange();
